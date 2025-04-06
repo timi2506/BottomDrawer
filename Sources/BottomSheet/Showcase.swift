@@ -3,6 +3,7 @@ import BottomSheet
 
 struct BottomSheetShowcase: View {
     @State var showBottomSheet = true
+    @State var height = 75
     var body: some View {
         NavigationView {
             Form {
@@ -20,13 +21,13 @@ struct BottomSheetShowcase: View {
             .onTapGesture {
                 showBottomSheet.toggle()
             }
-            .bottomSheet(isPresented: $showBottomSheet, interactiveDismiss: true, height: 75, maxHeight: 250) {
+            .bottomSheet(isPresented: $showBottomSheet, interactiveDismiss: true, height: $height, maxHeight: 250) {
                 Text("Hello")
             }
     }
     var showCase2: some View {
         Text("Plain BottomSheet (only Height Parameter)")
-            .bottomSheet(height: 100) {
+            .bottomSheet(height: $height) {
                 Text("hello")
             }
     }
