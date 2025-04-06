@@ -3,7 +3,7 @@ import BottomSheet
 
 struct BottomSheetShowcase: View {
     @State var showBottomSheet = true
-    @State var height = 75
+    @State var height: CGFloat = 75
     var body: some View {
         NavigationView {
             Form {
