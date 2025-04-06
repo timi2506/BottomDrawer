@@ -110,15 +110,29 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
 }
 
 extension View {
-    public func bottomSheet<ScrollContent: View>(
+    public func bottomSheet(
         isPresented: Binding<Bool>? = .constant(true),
         interactiveDismiss: Bool? = false,
         height: Binding<CGFloat>,
         initialHeight: CGFloat,
         maxHeight: CGFloat? = 250,
-        @ViewBuilder content: @escaping () -> ScrollContent
+        @ViewBuilder content: @escaping () -> AnyView
     ) -> some View {
-        modifier(BottomSheet(initialHeight: initialHeight, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
+        let wrappedContent = content()
+            .preferredColorScheme(
+                UITraitCollection.current.userInterfaceStyle == .dark ? .light : .dark
+            )
+        
+        return modifier(
+            BottomSheet(
+                initialHeight: initialHeight,
+                maxHeight: maxHeight!,
+                scrollContent: { wrappedContent },  // Pass wrapped content here
+                height: height,
+                isPresented: isPresented!,
+                interactiveDismiss: interactiveDismiss!
+            )
+        )
     }
 }
 
