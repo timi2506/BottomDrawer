@@ -121,7 +121,6 @@ extension View {
         @ViewBuilder content: @escaping () -> ScrollContent
     ) -> some View {
         modifier(BottomSheet(initialHeight: initialHeight, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
-            
     }
 }
 
