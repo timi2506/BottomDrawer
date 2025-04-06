@@ -84,17 +84,15 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
                         ScrollView {
                             scrollContent()
                                 .padding(.top)
-                                .background(colorScheme == .dark ? Color.white : Color.black)
-                                .foregroundColor(colorScheme == .dark ? .black : .white)
                         }
                         .scrollDisabled(height <= initialHeight + 1)
+                        .preferredColorScheme(colorScheme == .dark ? .light : .dark)
                     } else {
                         ScrollView {
                             scrollContent()
                                 .padding(.top)
-                                .background(colorScheme == .dark ? Color.white : Color.black)
-                                .foregroundColor(colorScheme == .dark ? .black : .white)
                         }
+                        .preferredColorScheme(colorScheme == .dark ? .light : .dark)
                     }
                 }
                 .frame(height: height)
