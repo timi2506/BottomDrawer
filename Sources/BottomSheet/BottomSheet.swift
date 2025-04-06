@@ -100,6 +100,11 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
                 .frame(height: height)
             }
             .ignoresSafeArea(.all)
+            .onAppear {
+                withAnimation(.bouncy) {
+                    height = initialHeight
+                }
+            }
         } else {
             content
         }
@@ -111,10 +116,11 @@ extension View {
         isPresented: Binding<Bool>? = .constant(true),
         interactiveDismiss: Bool? = false,
         height: Binding<CGFloat>,
+        initialHeight: CGFloat,
         maxHeight: CGFloat? = 250,
         @ViewBuilder content: @escaping () -> ScrollContent
     ) -> some View {
-        modifier(BottomSheet(initialHeight: height.wrappedValue, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
+        modifier(BottomSheet(initialHeight: initialHeight, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
     }
 }
 

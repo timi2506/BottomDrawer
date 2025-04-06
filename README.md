@@ -24,14 +24,16 @@ and press "Add Package" and make sure to link it to your target.
 **.bottomSheet { ... }** *View Modifier*
 ```swift
 some View {}
-  .bottomSheet(isPresented: Binding<Bool>?, interactiveDismiss: Bool?, height: CGFloat,   maxHeight: CGFloat?, content: () -> _)
+  .bottomSheet(isPresented: Binding<Bool>?, interactiveDismiss: Bool?, height: Binding<CGFloat>, initialHeight: CGFloat, maxHeight: CGFloat?, content: () -> _)
 ```
 - **isPresented** *Optional*
   - Binding Bool that is used to hide/show the Bottom Sheet, defaults to true
 - **interactiveDismiss** *Optional*
   - Bool to define whether the Bottom Sheet should be dismissable by swiping it to be bottom of the Screen, defaults to false
 - **height** *Required*
-  - The Initial and Minimum Height of the Bottom Sheet (keeping this at at least 75 is recommended)
+  - The Height as a Binding, can be updated and read programatically
+- **initialHeight** *Required*
+  - The Initial and Minimum Height
 - **maxHeight** *Optional*
   - The Maximum Height of the BottomSheet, defaults to 250
 - **content** *Required*

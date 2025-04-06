@@ -21,13 +21,13 @@ struct BottomSheetShowcase: View {
             .onTapGesture {
                 showBottomSheet.toggle()
             }
-            .bottomSheet(isPresented: $showBottomSheet, interactiveDismiss: true, height: $height, maxHeight: 250) {
+            .bottomSheet(isPresented: $showBottomSheet, interactiveDismiss: true, height: $height, initialHeight: 75, maxHeight: 250) {
                 Text("Hello")
             }
     }
     var showCase2: some View {
         Text("Plain BottomSheet (only Height Parameter)")
-            .bottomSheet(height: $height) {
+            .bottomSheet(height: $height, initialHeight: 100) {
                 Text("hello")
             }
     }
