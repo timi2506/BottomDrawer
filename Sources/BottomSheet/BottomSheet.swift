@@ -4,7 +4,7 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
     let initialHeight: CGFloat
     let maxHeight: CGFloat
     let scrollContent: () -> ScrollContent
-    @State var height: CGFloat
+    @Binding var height: CGFloat
     @Environment(\.colorScheme) private var colorScheme
     @Binding var isPresented: Bool
     let interactiveDismiss: Bool
@@ -110,11 +110,11 @@ extension View {
     public func bottomSheet<ScrollContent: View>(
         isPresented: Binding<Bool>? = .constant(true),
         interactiveDismiss: Bool? = false,
-        height: CGFloat,
+        height: Binding<CGFloat>,
         maxHeight: CGFloat? = 250,
         @ViewBuilder content: @escaping () -> ScrollContent
     ) -> some View {
-        modifier(BottomSheet(initialHeight: height, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
+        modifier(BottomSheet(initialHeight: height.wrappedValue, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
     }
 }
 
