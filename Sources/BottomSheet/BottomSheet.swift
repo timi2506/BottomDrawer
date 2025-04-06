@@ -86,13 +86,11 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
                                 .padding(.top)
                         }
                         .scrollDisabled(height <= initialHeight + 1)
-                        .preferredColorScheme(colorScheme == .dark ? .light : .dark)
                     } else {
                         ScrollView {
                             scrollContent()
                                 .padding(.top)
                         }
-                        .preferredColorScheme(colorScheme == .dark ? .light : .dark)
                     }
                 }
                 .frame(height: height)
@@ -110,29 +108,16 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
 }
 
 extension View {
-    public func bottomSheet(
+    public func bottomSheet<ScrollContent: View>(
         isPresented: Binding<Bool>? = .constant(true),
         interactiveDismiss: Bool? = false,
         height: Binding<CGFloat>,
         initialHeight: CGFloat,
         maxHeight: CGFloat? = 250,
-        @ViewBuilder content: @escaping () -> AnyView
+        @ViewBuilder content: @escaping () -> ScrollContent
     ) -> some View {
-        let wrappedContent = content()
-            .preferredColorScheme(
-                UITraitCollection.current.userInterfaceStyle == .dark ? .light : .dark
-            )
-        
-        return modifier(
-            BottomSheet(
-                initialHeight: initialHeight,
-                maxHeight: maxHeight!,
-                scrollContent: { wrappedContent },  // Pass wrapped content here
-                height: height,
-                isPresented: isPresented!,
-                interactiveDismiss: interactiveDismiss!
-            )
-        )
+        modifier(BottomSheet(initialHeight: initialHeight, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
+            
     }
 }
 
