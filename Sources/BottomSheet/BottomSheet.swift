@@ -106,7 +106,8 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
             .background(.background) // FIXME: this requires a bump to iOS 15!
             .mask(
                 // MARK: Content rounded corners (bottom only)
-                BottomRoundedRectangle()
+                // FIXME: Corner radius can't animate here. I assume that's because it is a shape and gets calculated once per draw.
+                BottomRoundedRectangle(cornerRadius: contentCornerRadius)
                 .ignoresSafeArea()  // Mask fully covers content, top-to-bottom
                 .offset(y: -height) // Mask moved such that the bottom roundness aligns with top of the sheet
             )
