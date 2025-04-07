@@ -6,6 +6,8 @@ struct BottomDrawer<ScrollContent: View>: ViewModifier {
     
     let scrollContent: () -> ScrollContent
     
+    let dragHandleVisibility: DragHandleVisibility
+    
     @Binding var height: CGFloat
     
     @Environment(\.colorScheme) private var colorScheme
@@ -54,7 +56,7 @@ struct BottomDrawer<ScrollContent: View>: ViewModifier {
     
     var dragHandle: some View {
         let t = height / maxHeight
-        let width = 148 + t * (50 - 148) // manual linear interpolation
+        let width = dragHandleVisibility == .static ? CGFloat(75) : CGFloat(148 + t * (50 - 148)) // manual linear interpolation if not static
         
         let fillOpacity = ((1 - t) + 0.5) * 0.5
         let fillColor = Color.primary.opacity(fillOpacity)
@@ -117,8 +119,10 @@ struct BottomDrawer<ScrollContent: View>: ViewModifier {
             VStack(spacing: 0) {
                 Spacer()
                 
-                // MARK: Drag handle
-                dragHandle
+                if dragHandleVisibility != .hidden {
+                    // MARK: Drag handle
+                    dragHandle
+                }
                 
                 // MARK: Drawer content
                 ZStack {
@@ -126,8 +130,10 @@ struct BottomDrawer<ScrollContent: View>: ViewModifier {
                         .fill(Color(UIColor.label))
                     VStack {
                         scrollContent()
+                            .padding(.top, dragHandleVisibility == .hidden ? 0 : isPresented ? 0 : 10)
                             .colorScheme(colorScheme == .dark ? .light : .dark)
                     }
+                    .padding(-15)
                 }
                 .frame(height: height)
             }
@@ -154,12 +160,13 @@ extension View {
     public func bottomDrawer<ScrollContent: View>(
         isPresented: Binding<Bool>? = .constant(true),
         interactiveDismiss: Bool? = false,
+        dragHandleVisibility: DragHandleVisibility? = .visible,
         height: Binding<CGFloat>,
         initialHeight: CGFloat,
         maxHeight: CGFloat? = 250,
         @ViewBuilder content: @escaping () -> ScrollContent
     ) -> some View {
-        modifier(BottomDrawer(initialHeight: initialHeight, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
+        modifier(BottomDrawer(initialHeight: initialHeight, maxHeight: maxHeight!, scrollContent: content, dragHandleVisibility: dragHandleVisibility!, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
     }
 }
 
@@ -192,4 +199,10 @@ struct BottomRoundedRectangle: Shape {
 
         return path
     }
+}
+
+public enum DragHandleVisibility {
+    case visible
+    case `static`
+    case hidden
 }

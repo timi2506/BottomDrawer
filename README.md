@@ -29,12 +29,14 @@ and press "Add Package" and make sure to link it to your target.
 **.bottomDrawer { ... }** *View Modifier*
 ```swift
 some View {}
-  .bottomDrawer(isPresented: Binding<Bool>?, interactiveDismiss: Bool?, height: Binding<CGFloat>, initialHeight: CGFloat, maxHeight: CGFloat?, content: () -> _)
+  .bottomDrawer(isPresented: Binding<Bool>?, interactiveDismiss: Bool?, dragHandleVisibility: DragHandleVisibility?, height: Binding<CGFloat>, initialHeight: CGFloat, maxHeight: CGFloat?, content: () -> _)
 ```
 - **isPresented** *Optional*
   - Binding Bool that is used to hide/show the Bottom Drawer, defaults to true
 - **interactiveDismiss** *Optional*
   - Bool to define whether the Bottom Drawer should be dismissable by swiping it to be bottom of the Screen, defaults to false
+- **dragHandleVisibility** *Optional*
+  - Defines the Drag Handles Appearance, more info in the DragHandleVisibility section
 - **height** *Required*
   - The Height as a Binding, can be updated and read programatically
 - **initialHeight** *Required*
@@ -53,9 +55,19 @@ some View {}
 - ✅ on a Root View
 - ✅ on a View that will be navigated to
 - ❌ on a View contained inside of another View (for example on a TextView inside of a TabView) *¹
-v
+
 *¹ What to do instead: Apply it on the full TabView
   
+  
+**DragHandleVisibility** *Enum*
+- The Drag Handle Visibility Enum has 3 types:
+- **visible** 
+    - The Default Appearance, Makes the Handle Visible and with Width Animations adapting to the Drag Height
+- **static**
+    - same as visible with the exception that the handle's width does not adapt
+- **hidden**
+    - hides the Drag Handle, this is especially useful for Apps that use their own, custom Drag Handle or programmatic height changing logic
+    
 ## Issues or Questions
 
 If you have any issues or questions feel free to open an [issue](https://github.com/timi2506/BottomDrawer/issues/new/choose) or contact me on [Twitter](https://x.com/timi2506)

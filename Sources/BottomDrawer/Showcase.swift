@@ -21,7 +21,7 @@ struct BottomSheetShowcase: View {
             .onTapGesture {
                 showBottomSheet.toggle()
             }
-            .bottomDrawer(isPresented: $showBottomSheet, interactiveDismiss: true, height: $height, initialHeight: 75, maxHeight: 250) {
+            .bottomDrawer(isPresented: $showBottomSheet, interactiveDismiss: true, dragHandleVisibility: .visible, height: $height, initialHeight: 75, maxHeight: 250) {
                 Text("Hello")
             }
     }
