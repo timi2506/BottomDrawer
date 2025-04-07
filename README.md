@@ -6,7 +6,12 @@
 <h1 align="left">BottomDrawer</h1>
 
 ## Showcase
-A Showcase of this Package can be seen in Sources/BottomDrawer/Showcase.swift
+A Showcase of this Package can be seen in Sources/BottomDrawer/Showcase.swift and in this video:
+
+
+
+https://github.com/user-attachments/assets/d5da44d6-407b-4cf7-bc8e-aeff0d09735d
+
 
 ## Installation
 ### Using Xcode's built-in Package Manager 
