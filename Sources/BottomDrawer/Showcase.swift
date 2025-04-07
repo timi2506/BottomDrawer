@@ -1,5 +1,5 @@
 import SwiftUI
-import BottomSheet
+import BottomDrawer
 
 struct BottomSheetShowcase: View {
     @State var showBottomSheet = true
@@ -21,15 +21,13 @@ struct BottomSheetShowcase: View {
             .onTapGesture {
                 showBottomSheet.toggle()
             }
-            .bottomSheet(isPresented: $showBottomSheet, interactiveDismiss: true, height: $height, initialHeight: 75, maxHeight: 250) {
+            .bottomDrawer(isPresented: $showBottomSheet, interactiveDismiss: true, height: $height, initialHeight: 75, maxHeight: 250) {
                 Text("Hello")
-                    .padding(100)
-                    .background(Material.ultraThin)
             }
     }
     var showCase2: some View {
         Text("Plain BottomSheet (only Height Parameter)")
-            .bottomSheet(height: $height, initialHeight: 100) {
+            .bottomDrawer(height: $height, initialHeight: 100) {
                 Text("hello")
             }
     }

@@ -103,7 +103,7 @@ struct BottomDrawer<ScrollContent: View>: ViewModifier {
                     .frame(height: height)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(UIColor.systemBackground)) // FIXME: this requires a bump to iOS 15!
+            .background(.background)
             .mask(
                 // MARK: Content rounded corners (bottom only)
                 // FIXME: Corner radius can't animate here. I assume that's because it is a shape and gets calculated once per draw.
