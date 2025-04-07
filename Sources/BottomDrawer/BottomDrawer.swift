@@ -124,19 +124,9 @@ struct BottomDrawer<ScrollContent: View>: ViewModifier {
                 ZStack {
                     Rectangle()
                         .fill(Color(UIColor.label))
-                    if #available(iOS 16.0, *) {
-                        ScrollView {
-                            scrollContent()
-                                .padding(.top)
-                                .colorScheme(colorScheme == .dark ? .light : .dark)
-                        }
-                        .scrollDisabled(height <= initialHeight + 1)
-                    } else {
-                        ScrollView {
-                            scrollContent()
-                                .padding(.top)
-                                .colorScheme(colorScheme == .dark ? .light : .dark)
-                        }
+                    VStack {
+                        scrollContent()
+                            .colorScheme(colorScheme == .dark ? .light : .dark)
                     }
                 }
                 .frame(height: height)

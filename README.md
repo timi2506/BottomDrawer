@@ -43,7 +43,7 @@ some View {}
   - The Maximum Height of the Drawer, defaults to 250
 - **content** *Required*
   - The View to show inside of the Drawer
-  - *This View is wrapped in a ScrollView by default and if used on iOS 16+ the ScrollView won't scroll until the Bottom Drawer is Expanded to a height higher than the minimum height*
+  - *This View is wrapped in a VStack by default*
  
 ***Optional*** means this value can be safely omitted 
 
