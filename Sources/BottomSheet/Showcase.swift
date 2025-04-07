@@ -23,6 +23,8 @@ struct BottomSheetShowcase: View {
             }
             .bottomSheet(isPresented: $showBottomSheet, interactiveDismiss: true, height: $height, initialHeight: 75, maxHeight: 250) {
                 Text("Hello")
+                    .padding(100)
+                    .background(Material.ultraThin)
             }
     }
     var showCase2: some View {
@@ -31,4 +33,8 @@ struct BottomSheetShowcase: View {
                 Text("hello")
             }
     }
+}
+
+#Preview {
+    BottomSheetShowcase()
 }

@@ -103,7 +103,7 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
                     .frame(height: height)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.background) // FIXME: this requires a bump to iOS 15!
+            .background(Color(UIColor.systemBackground)) // FIXME: this requires a bump to iOS 15!
             .mask(
                 // MARK: Content rounded corners (bottom only)
                 // FIXME: Corner radius can't animate here. I assume that's because it is a shape and gets calculated once per draw.
@@ -128,16 +128,14 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
                         ScrollView {
                             scrollContent()
                                 .padding(.top)
-                                .background(colorScheme == .dark ? Color.white : Color.black)
-                                .foregroundColor(colorScheme == .dark ? .black : .white)
+                                .colorScheme(colorScheme == .dark ? .light : .dark)
                         }
                         .scrollDisabled(height <= initialHeight + 1)
                     } else {
                         ScrollView {
                             scrollContent()
                                 .padding(.top)
-                                .background(colorScheme == .dark ? Color.white : Color.black)
-                                .foregroundColor(colorScheme == .dark ? .black : .white)
+                                .colorScheme(colorScheme == .dark ? .light : .dark)
                         }
                     }
                 }
