@@ -31,7 +31,8 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
                     if interactiveDismiss {
                         withAnimation(.bouncy(duration: 0.5)) {
                             height = 0
-                        } completion: {
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             isPresented = false
                             height = 0
                         }
@@ -53,20 +54,27 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
     
     var dragHandle: some View {
         let t = height / maxHeight
-        let width = 148 + t * ( 50 - 148 )
+        let width = 148 + t * (50 - 148) // manual linear interpolation
         
+        let fillOpacity = ((1 - t) + 0.5) * 0.5
+        let fillColor = Color.primary.opacity(fillOpacity)
+        
+        let effectiveColorScheme: ColorScheme = colorScheme == .dark ? .light : .dark
+
         return RoundedRectangle(cornerRadius: 100)
-            .fill(.primary.opacity((1 - t + 0.5) * 0.5))
-            .colorScheme(colorScheme == .dark ? .light : .dark)
+            .fill(fillColor)
+            .colorScheme(effectiveColorScheme)
+        
             .frame(width: width, height: 6)
             .padding(8)
-            .contentShape(.rect)
         
+            .contentShape(.rect)
             .gesture(dragGesture)
         
             .opacity(height != 0 ? 1 : 0)
-            .animation(.smooth, value: isPresented)
+    //        .animation(.smooth, value: isPresented)
     }
+
     
     @State private var contentCornerRadius: CGFloat = 0
     
@@ -95,21 +103,14 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
                     .frame(height: height)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.background)
+            .background(.background) // FIXME: this requires a bump to iOS 15!
             .mask(
                 // MARK: Content rounded corners (bottom only)
-                UnevenRoundedRectangle(
-                    cornerRadii: .init(
-                        topLeading: 0,
-                        bottomLeading: contentCornerRadius,
-                        bottomTrailing: contentCornerRadius,
-                        topTrailing: 0
-                    )
-                )
+                BottomRoundedRectangle()
                 .ignoresSafeArea()  // Mask fully covers content, top-to-bottom
                 .offset(y: -height) // Mask moved such that the bottom roundness aligns with top of the sheet
             )
-            .background(.primary)
+            .background(Color.primary)
             
             // MARK: Sheet
             VStack(spacing: 0) {
@@ -148,7 +149,7 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
             // we can disable all controls inside the sheet:
             .disabled(!isPresented)
             
-            .onChange(of: isPresented) { oldValue, newValue in
+            .onChange(of: isPresented) { value in
                 refreshPresentation(animate: true)
             }
             .onAppear() {
