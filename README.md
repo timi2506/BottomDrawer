@@ -56,4 +56,4 @@ v
 If you have any issues or questions feel free to open an [issue](https://github.com/timi2506/BottomDrawer/issues/new/choose) or contact me on [Twitter](https://x.com/timi2506)
 
 ## Requirements
-- iOS 14+
+- iOS 15+
