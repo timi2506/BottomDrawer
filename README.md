@@ -1,12 +1,12 @@
 
 <p align="right">
-  <img align="right" height="140" src="https://github.com/timi2506/RAW-files-i-need-for-stuff/blob/main/BottomSheetIcon.png?raw=true" alt="BottomSheet" style="float: right; border-radius: 10px;"/>
+  <img align="right" height="140" src="https://github.com/timi2506/RAW-files-i-need-for-stuff/blob/main/BottomSheetIcon.png?raw=true" alt="BottomDrawer" style="float: right; border-radius: 10px;"/>
 </p>
 
-<h1 align="left">BottomSheet</h1>
+<h1 align="left">BottomDrawer</h1>
 
 ## Showcase
-A Showcase of this Package can be seen in Sources/BottomSheet/Showcase.swift
+A Showcase of this Package can be seen in Sources/BottomDrawer/Showcase.swift
 
 ## Installation
 ### Using Xcode's built-in Package Manager 
@@ -14,31 +14,31 @@ Go to File > Add Package Dependencies...
 
 then, in the Search-Bar enter: 
 
-```https://github.com/timi2506/BottomSheet.git``` 
+```https://github.com/timi2506/BottomDrawer.git``` 
 
 and press "Add Package" and make sure to link it to your target.
 <img width="362" alt="Screenshot 2025-03-04 at 11 16 34" src="https://github.com/user-attachments/assets/8b3672b9-9345-4d6b-9b0d-26d03bd189c7" />
 
 ## Usage
 ### Examples
-**.bottomSheet { ... }** *View Modifier*
+**.bottomDrawer { ... }** *View Modifier*
 ```swift
 some View {}
-  .bottomSheet(isPresented: Binding<Bool>?, interactiveDismiss: Bool?, height: Binding<CGFloat>, initialHeight: CGFloat, maxHeight: CGFloat?, content: () -> _)
+  .bottomDrawer(isPresented: Binding<Bool>?, interactiveDismiss: Bool?, height: Binding<CGFloat>, initialHeight: CGFloat, maxHeight: CGFloat?, content: () -> _)
 ```
 - **isPresented** *Optional*
-  - Binding Bool that is used to hide/show the Bottom Sheet, defaults to true
+  - Binding Bool that is used to hide/show the Bottom Drawer, defaults to true
 - **interactiveDismiss** *Optional*
-  - Bool to define whether the Bottom Sheet should be dismissable by swiping it to be bottom of the Screen, defaults to false
+  - Bool to define whether the Bottom Drawer should be dismissable by swiping it to be bottom of the Screen, defaults to false
 - **height** *Required*
   - The Height as a Binding, can be updated and read programatically
 - **initialHeight** *Required*
   - The Initial and Minimum Height
 - **maxHeight** *Optional*
-  - The Maximum Height of the BottomSheet, defaults to 250
+  - The Maximum Height of the Drawer, defaults to 250
 - **content** *Required*
-  - The View to show inside of the BottomSheet
-  - *This View is wrapped in a ScrollView by default and if used on iOS 16+ the ScrollView won't scroll until the Bottom Sheet is Expanded to a height higher than the minimum height*
+  - The View to show inside of the Drawer
+  - *This View is wrapped in a ScrollView by default and if used on iOS 16+ the ScrollView won't scroll until the Bottom Drawer is Expanded to a height higher than the minimum height*
  
 ***Optional*** means this value can be safely omitted 
 
@@ -53,7 +53,7 @@ v
   
 ## Issues or Questions
 
-If you have any issues or questions feel free to open an [issue](https://github.com/timi2506/BottomSheet/issues/new/choose) or contact me on [Twitter](https://x.com/timi2506)
+If you have any issues or questions feel free to open an [issue](https://github.com/timi2506/BottomDrawer/issues/new/choose) or contact me on [Twitter](https://x.com/timi2506)
 
 ## Requirements
 - iOS 14+

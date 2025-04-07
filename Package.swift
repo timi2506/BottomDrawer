@@ -2,22 +2,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "BottomSheet",
+    name: "BottomDrawer",
     platforms: [
         .iOS(.v14)
     ],
     products: [
         .library(
-            name: "BottomSheet",
-            targets: ["BottomSheet"]
+            name: "BottomDrawer",
+            targets: ["BottomDrawer"]
         ),
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "BottomSheet",
+            name: "BottomDrawer",
             dependencies: [],
-            path: "Sources/BottomSheet",
+            path: "Sources/BottomDrawer",
             resources: []
         )
     ]

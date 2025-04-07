@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct BottomSheet<ScrollContent: View>: ViewModifier {
+struct BottomDrawer<ScrollContent: View>: ViewModifier {
     let initialHeight: CGFloat
     let maxHeight:     CGFloat
     
@@ -80,7 +80,7 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
     
     // This function sets the height according to isPresented, animated if desired.
     // The non-animating version is used inside .onAppear, as we wouldn't want to animate collapsing
-    // the sheet when starting out as isPresented == false.
+    // the drawer when starting out as isPresented == false.
     private func refreshPresentation(animate: Bool) {
         if isPresented { height = 0 }
         
@@ -109,18 +109,18 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
                 // FIXME: Corner radius can't animate here. I assume that's because it is a shape and gets calculated once per draw.
                 BottomRoundedRectangle(cornerRadius: contentCornerRadius)
                 .ignoresSafeArea()  // Mask fully covers content, top-to-bottom
-                .offset(y: -height) // Mask moved such that the bottom roundness aligns with top of the sheet
+                .offset(y: -height) // Mask moved such that the bottom roundness aligns with top of the drawer
             )
             .background(Color.primary)
             
-            // MARK: Sheet
+            // MARK: Drawer
             VStack(spacing: 0) {
                 Spacer()
                 
                 // MARK: Drag handle
                 dragHandle
                 
-                // MARK: Sheet content
+                // MARK: Drawer content
                 ZStack {
                     Rectangle()
                         .fill(Color(UIColor.label))
@@ -144,15 +144,15 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
             .ignoresSafeArea(.all)
             
             // Because we want to animate state changes, we can't have the state views being conditional.
-            // To prevent interaction while the sheet is going away, or interaction while off-screen with VoiceOver,
-            // we can disable all controls inside the sheet:
+            // To prevent interaction while the drawer is going away, or interaction while off-screen with VoiceOver,
+            // we can disable all controls inside the drawer:
             .disabled(!isPresented)
             
             .onChange(of: isPresented) { value in
                 refreshPresentation(animate: true)
             }
             .onAppear() {
-                // animate: false - don't animate the sheet when appearing for the first time
+                // animate: false - don't animate the drawer when appearing for the first time
                 refreshPresentation(animate: false)
             }
         }
@@ -161,7 +161,7 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
 }
 
 extension View {
-    public func bottomSheet<ScrollContent: View>(
+    public func bottomDrawer<ScrollContent: View>(
         isPresented: Binding<Bool>? = .constant(true),
         interactiveDismiss: Bool? = false,
         height: Binding<CGFloat>,
@@ -169,7 +169,7 @@ extension View {
         maxHeight: CGFloat? = 250,
         @ViewBuilder content: @escaping () -> ScrollContent
     ) -> some View {
-        modifier(BottomSheet(initialHeight: initialHeight, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
+        modifier(BottomDrawer(initialHeight: initialHeight, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
     }
 }
 
