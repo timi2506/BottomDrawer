@@ -2,81 +2,123 @@ import SwiftUI
 
 struct BottomSheet<ScrollContent: View>: ViewModifier {
     let initialHeight: CGFloat
-    let maxHeight: CGFloat
+    let maxHeight:     CGFloat
+    
     let scrollContent: () -> ScrollContent
+    
     @Binding var height: CGFloat
+    
     @Environment(\.colorScheme) private var colorScheme
+    
     @Binding var isPresented: Bool
+    
     let interactiveDismiss: Bool
-    func body(content: Content) -> some View {
-        if isPresented {
-            VStack(spacing: 0) {
-                ZStack {
-                    Color.primary
-                    VStack {
-                        ZStack {
-                            content
-                                .padding(.top, 60)
-                                .padding(.bottom, 10)
-                            VStack {
-                                Spacer()
-                                RoundedRectangle(cornerRadius: 100)
-                                    .fill(.gray.opacity(0.5))
-                                    .frame(width: 50, height: 7.5)
-                                    .padding(10)
-                                    .gesture(
-                                        DragGesture()
-                                            .onChanged { gesture in
-                                                if height >= maxHeight {
-                                                    if gesture.translation.height >= 0 {
-                                                        height += -gesture.translation.height
-                                                    } else {
-                                                        height += 0.5
-                                                    }
-                                                } else {
-                                                    height += -gesture.translation.height
-                                                }
-                                            }
-                                            .onEnded { _ in
-                                                if height >= maxHeight {
-                                                    withAnimation(.bouncy(duration: 0.5)) {
-                                                        height = maxHeight
-                                                    }
-                                                } else if height <= 10 {
-                                                    if interactiveDismiss {
-                                                        withAnimation(.bouncy(duration: 0.5)) {
-                                                            height = 0.0000000000000001 // Finite but very small number to avoid "Invalid frame dimension (negative or non-finite)" lol
-                                                        }
-                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                                            isPresented = false
-                                                            height = initialHeight
-                                                        }
-                                                    }
-                                                } else if height <= initialHeight {
-                                                    withAnimation(.bouncy(duration: 0.5)) {
-                                                        height = initialHeight
-                                                    }
-                                                }
-                                                if !interactiveDismiss {
-                                                    if height <= 1 {
-                                                        withAnimation(.bouncy(duration: 0.5)) {
-                                                            height = initialHeight
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                    )
-                            }
-                        }
-
+    
+    // MARK: Drag gesture configuration
+    var dragGesture: some Gesture {
+        DragGesture(minimumDistance: 0)
+            .onChanged { gesture in
+                height = (height - gesture.translation.height) > maxHeight ?
+                    maxHeight + ((height - gesture.translation.height) - maxHeight) * 0.15 :
+                    max(0, height - gesture.translation.height)
+            }
+            .onEnded { _ in
+                if height >= maxHeight {
+                    withAnimation(.bouncy(duration: 0.5)) {
+                        height = maxHeight
                     }
-                    .frame(maxWidth: .infinity)
-                    .cornerRadius(25)
-                    .background(
-                        BottomRoundedRectangle(cornerRadius: 25)
-                            .fill(.background)
-                    )
+                } else if height <= 10 {
+                    if interactiveDismiss {
+                        withAnimation(.bouncy(duration: 0.5)) {
+                            height = 0
+                        } completion: {
+                            isPresented = false
+                            height = 0
+                        }
+                    }
+                } else if height <= initialHeight {
+                    withAnimation(.bouncy(duration: 0.5)) {
+                        height = initialHeight
+                    }
                 }
+                if !interactiveDismiss {
+                    if height <= 1 {
+                        withAnimation(.bouncy(duration: 0.5)) {
+                            height = initialHeight
+                        }
+                    }
+                }
+            }
+    }
+    
+    var dragHandle: some View {
+        let t = height / maxHeight
+        let width = 148 + t * ( 50 - 148 )
+        
+        return RoundedRectangle(cornerRadius: 100)
+            .fill(.primary.opacity((1 - t + 0.5) * 0.5))
+            .colorScheme(colorScheme == .dark ? .light : .dark)
+            .frame(width: width, height: 6)
+            .padding(8)
+            .contentShape(.rect)
+        
+            .gesture(dragGesture)
+        
+            .opacity(height != 0 ? 1 : 0)
+            .animation(.smooth, value: isPresented)
+    }
+    
+    @State private var contentCornerRadius: CGFloat = 0
+    
+    // This function sets the height according to isPresented, animated if desired.
+    // The non-animating version is used inside .onAppear, as we wouldn't want to animate collapsing
+    // the sheet when starting out as isPresented == false.
+    private func refreshPresentation(animate: Bool) {
+        if isPresented { height = 0 }
+        
+        // Don't use .bouncy for collapsing, as it will bounce down the rounded corner mask at the top.
+        withAnimation(animate ? (isPresented ? .bouncy : .smooth(duration: 0.3)) : .none) {
+            height = isPresented ? initialHeight : 0
+            contentCornerRadius = isPresented ? 25 : 0 // TODO: device radius would be cool here!
+        }
+    }
+    
+    func body(content: Content) -> some View {
+        ZStack {
+            
+            // MARK: User content
+            VStack(spacing: 0) {
+                content
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                Spacer()
+                    .frame(height: height)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.background)
+            .mask(
+                // MARK: Content rounded corners (bottom only)
+                UnevenRoundedRectangle(
+                    cornerRadii: .init(
+                        topLeading: 0,
+                        bottomLeading: contentCornerRadius,
+                        bottomTrailing: contentCornerRadius,
+                        topTrailing: 0
+                    )
+                )
+                .ignoresSafeArea()  // Mask fully covers content, top-to-bottom
+                .offset(y: -height) // Mask moved such that the bottom roundness aligns with top of the sheet
+            )
+            .background(.primary)
+            
+            // MARK: Sheet
+            VStack(spacing: 0) {
+                Spacer()
+                
+                // MARK: Drag handle
+                dragHandle
+                
+                // MARK: Sheet content
                 ZStack {
                     Rectangle()
                         .fill(Color(UIColor.label))
@@ -100,14 +142,21 @@ struct BottomSheet<ScrollContent: View>: ViewModifier {
                 .frame(height: height)
             }
             .ignoresSafeArea(.all)
-            .onAppear {
-                withAnimation(.bouncy) {
-                    height = initialHeight
-                }
+            
+            // Because we want to animate state changes, we can't have the state views being conditional.
+            // To prevent interaction while the sheet is going away, or interaction while off-screen with VoiceOver,
+            // we can disable all controls inside the sheet:
+            .disabled(!isPresented)
+            
+            .onChange(of: isPresented) { oldValue, newValue in
+                refreshPresentation(animate: true)
             }
-        } else {
-            content
+            .onAppear() {
+                // animate: false - don't animate the sheet when appearing for the first time
+                refreshPresentation(animate: false)
+            }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -123,8 +172,6 @@ extension View {
         modifier(BottomSheet(initialHeight: initialHeight, maxHeight: maxHeight!, scrollContent: content, height: height, isPresented: isPresented!, interactiveDismiss: interactiveDismiss!))
     }
 }
-
-import SwiftUI
 
 struct BottomRoundedRectangle: Shape {
     var cornerRadius: CGFloat = 25.0
