@@ -132,6 +132,7 @@ struct BottomDrawer<ScrollContent: View>: ViewModifier {
                         scrollContent()
                             .padding(.top, dragHandleVisibility == .hidden ? 0 : isPresented ? 0 : 10)
                             .colorScheme(colorScheme == .dark ? .light : .dark)
+                            .offset(y: isPresented ? 0 : 50)
                     }
                     .padding(-15)
                 }
