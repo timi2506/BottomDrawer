@@ -8,10 +8,7 @@
 ## Showcase
 A Showcase of this Package can be seen in Sources/BottomDrawer/Showcase.swift and in this video:
 
-
-
-https://github.com/user-attachments/assets/d5da44d6-407b-4cf7-bc8e-aeff0d09735d
-
+https://github.com/user-attachments/assets/91374c5e-381a-4bb6-b176-0e496138efb1
 
 ## Installation
 ### Using Xcode's built-in Package Manager 
