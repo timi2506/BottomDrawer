@@ -8,7 +8,7 @@
 ## Showcase
 A Showcase of this Package can be seen in Sources/BottomDrawer/Showcase.swift and in this video:
 
-https://github.com/user-attachments/assets/91374c5e-381a-4bb6-b176-0e496138efb1
+https://raw.githubusercontent.com/timi2506/RAW-files-i-need-for-stuff/refs/heads/main/BottomSheetShowcase.mov
 
 ## Installation
 ### Using Xcode's built-in Package Manager 
